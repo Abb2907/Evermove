@@ -8,16 +8,20 @@ const Dashboard = () => {
   const [evaluation, setEvaluation] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const API_BASE = window.location.hostname === 'localhost' && window.location.port === '5173' 
+    ? 'http://localhost:4000' 
+    : '';
+
   const fetchEverything = async (userId) => {
     setLoading(true);
     try {
       // 1. Fetch the static user profile
-      const statusRes = await fetch(`http://localhost:4000/api/engine/status/${userId}`);
+      const statusRes = await fetch(`${API_BASE}/api/engine/status/${userId}`);
       const statusJson = await statusRes.json();
       if (statusJson.success) setUserData(statusJson.user);
 
       // 2. Fetch the dynamic daily evaluation (simulates the morning sync)
-      const evalRes = await fetch('http://localhost:4000/api/engine/evaluate', {
+      const evalRes = await fetch(`${API_BASE}/api/engine/evaluate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId })

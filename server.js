@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const path = require("path");
 const cors = require("cors");
 const engineRoutes = require("./routes/engineRoutes");
 
@@ -11,9 +12,12 @@ app.use(express.json());
 // Main Adaptive Engine Routes
 app.use("/api/engine", engineRoutes);
 
-// Root endpoint welcome message
-app.get("/", (req, res) => {
-  res.send("<h1>EverMove API Running</h1><p>Visit /api/engine/status/user_101 or POST to /api/engine/evaluate.</p>");
+// Serve static files from the React frontend
+app.use(express.static(path.join(__dirname, 'client/dist')));
+
+// Catch-all route to serve the React app
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client/dist', 'index.html'));
 });
 
 // Health check
