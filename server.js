@@ -20,8 +20,8 @@ app.get("/health", (req, res) => {
   res.json({ status: "EverMove Backend Active" });
 });
 
-// Catch-all route to serve the React app
-app.get('*', (req, res) => {
+// Catch-all route to serve the React app (Express 5.x compatible fallback)
+app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'client/dist', 'index.html'));
 });
 
